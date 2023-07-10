@@ -1,0 +1,12 @@
+.resultDiv {
+	max-height: 250px;
+	overflow-y: scroll;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+}
+
+.resultDiv p {
+    text-align: center;
+}

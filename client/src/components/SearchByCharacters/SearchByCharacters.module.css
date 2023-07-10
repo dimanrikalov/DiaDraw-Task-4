@@ -1,0 +1,43 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    border: 1px solid grey;
+    border-radius: 12px;
+    padding: 32px;
+}
+
+.inputDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.inputDiv label {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.inputDiv input {
+    padding: 3px 6px;
+    border-radius: 3px;
+    border: 1px solid grey;
+    width: 100%;
+}
+
+.resultDiv {
+    max-height: 250px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}

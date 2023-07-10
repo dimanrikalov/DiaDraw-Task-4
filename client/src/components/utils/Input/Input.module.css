@@ -1,0 +1,19 @@
+.inputDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+.inputDiv label {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.inputDiv input {
+    padding: 5px 6px;
+    border-radius: 3px;
+    border: 1px solid grey;
+    width: 100%;
+}

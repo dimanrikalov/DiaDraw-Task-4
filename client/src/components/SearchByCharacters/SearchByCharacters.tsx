@@ -1,13 +1,15 @@
-import { Button } from '../utils/Button/Button';
+import { Input } from '../utils/Input/Input';
 import { useFetch } from '../../hooks/useFetch';
 import styles from './SearchByCharacters.module.css';
 import { FormEvent, useEffect, useState } from 'react';
+import { Form } from '../../components/utils/Form/Form';
 
 export const SearchByCharacters = () => {
 	const { data, isLoading } = useFetch();
-	const [input, setInput] = useState('');
 	const [results, setResults] = useState<{ [key: string]: string[] }[]>([]);
 	const [filteredResults, setFilteredResults] = useState<string[]>([]);
+	const [input, setInput] = useState('');
+	const [shouldHide, setShouldHide] = useState(true);
 
 	useEffect(() => {
 		if (!isLoading) {
@@ -53,37 +55,36 @@ export const SearchByCharacters = () => {
 				setFilteredResults(realRes);
 				return;
 			}
+			setShouldHide(false);
 			setFilteredResults(res[input[0]]);
 		}
 	};
 
 	return (
-		<div className={styles.container}>
+		<>
 			{isLoading ? (
 				<h1>Fetching data...</h1>
 			) : (
-				<form onSubmit={handleSubmit} className={styles.formContainer}>
-					<h3>Find countries by characters</h3>
-					<div className={styles.inputDiv}>
-						<label htmlFor="input">
-							Enter characters to search for:
-						</label>
-						<input
-							type="text"
-							id="input"
-							placeholder="Enter up to 2 characters"
+				<>
+					<Form handleSubmit={handleSubmit} buttonMessage={'Submit'}>
+						<h3>Find countries by characters</h3>
+						<Input
+							labelText={'Enter up to 2 characters'}
+							placeholder={'Example "m/mo"'}
 							value={input}
-							onChange={(e) => setInput(e.target.value)}
+							setValue={setInput}
 						/>
-					</div>
-					<Button message={'Find countries'} />
-					<div className={styles.resultDiv}>
-						{filteredResults.map((x, i) => (
-							<p key={i}>{x}</p>
-						))}
-					</div>
-				</form>
+						<div
+							className={styles.resultDiv}
+							style={{ display: shouldHide ? 'none' : 'block' }}
+						>
+							{filteredResults.map((x, i) => (
+								<p key={i}>{x}</p>
+							))}
+						</div>
+					</Form>
+				</>
 			)}
-		</div>
+		</>
 	);
 };

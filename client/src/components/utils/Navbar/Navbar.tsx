@@ -1,6 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import styles from './Navbar.module.css';
 import { ROUTES } from '../../../Router';
+import { Button } from '../Button/Button';
+import { useNavigate } from 'react-router-dom';
 
 export const Navbar = () => {
 	const navigate = useNavigate();
@@ -9,41 +10,31 @@ export const Navbar = () => {
 			<nav>
 				<ul className={styles.navContainer}>
 					<li>
-						<button onClick={() => navigate(ROUTES.HOME)}>
-							Home
-						</button>
+						<Button message={'Home'} url={ROUTES.HOME} />
 					</li>
 					<li>
-						<button onClick={() => navigate(ROUTES.FIND_DISTANCE)}>
-							Get Distance Between 2 Countries
-						</button>
+						<Button
+							message={'Get Distance Between 2 Countries'}
+							url={ROUTES.FIND_DISTANCE}
+						/>
 					</li>
 					<li>
-						<button
-							onClick={() =>
-								navigate(ROUTES.FIND_CLOSEST_NON_NEIGHBOURING)
-							}
-						>
-							Get Closest Non-neighbouring Country
-						</button>
+						<Button
+							message={'Get Closest Non-neighbouring Country'}
+							url={ROUTES.FIND_CLOSEST_NON_NEIGHBOURING}
+						/>
 					</li>
 					<li>
-						<button
-							onClick={() =>
-								navigate(ROUTES.FIND_COUNTRIES_WITHIN_TIMEZONES)
-							}
-						>
-							Get All Countries Within 2 Timezones
-						</button>
+						<Button
+							message={'Get All Countries Within 2 Timezones'}
+							url={ROUTES.FIND_COUNTRIES_WITHIN_TIMEZONES}
+						/>
 					</li>
 					<li>
-						<button
-							onClick={() =>
-								navigate(ROUTES.SEARCH_COUNTRIES_BY_CHARS)
-							}
-						>
-							Get Countries By Characters
-						</button>
+						<Button
+							message={'Get Countries By Characters'}
+							url={ROUTES.SEARCH_COUNTRIES_BY_CHARS}
+						/>
 					</li>
 				</ul>
 			</nav>

@@ -9,7 +9,7 @@ export enum ROUTES {
 	HOME = '/',
 	FIND_DISTANCE = '/find-distance',
 	SEARCH_COUNTRIES_BY_CHARS = '/search-countries-by-chars',
-	FIND_COUNTRIES_WITHIN_TIMEZONES = '/find-countries-within-timezone',
+	FIND_COUNTRIES_WITHIN_TIMEZONES = '/find-countries-within-timezones',
 	FIND_CLOSEST_NON_NEIGHBOURING = '/find-closest-non-neighbouring-country',
 }
 

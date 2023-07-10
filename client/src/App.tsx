@@ -6,14 +6,14 @@ import { Navbar } from './components/utils/Navbar/Navbar';
 function App() {
 	return (
 		<div className="App">
-			<header>
-				<Navbar />
-			</header>
-			<main>
-				<BrowserRouter>
+			<BrowserRouter>
+				<header>
+					<Navbar />
+				</header>
+				<main>
 					<Router />
-				</BrowserRouter>
-			</main>
+				</main>
+			</BrowserRouter>
 		</div>
 	);
 }

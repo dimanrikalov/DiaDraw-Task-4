@@ -2,7 +2,7 @@
 	padding: 16px 32px;
 	list-style-type: none;
 	display: flex;
-	justify-content: flex-end;
+	justify-content: center;
 	align-items: center;
 	gap: 16px;
 }

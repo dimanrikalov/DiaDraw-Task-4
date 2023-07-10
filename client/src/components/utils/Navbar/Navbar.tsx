@@ -1,10 +1,8 @@
 import styles from './Navbar.module.css';
 import { ROUTES } from '../../../Router';
 import { Button } from '../Button/Button';
-import { useNavigate } from 'react-router-dom';
 
 export const Navbar = () => {
-	const navigate = useNavigate();
 	return (
 		<div>
 			<nav>

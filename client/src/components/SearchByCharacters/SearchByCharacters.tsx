@@ -6,9 +6,9 @@ import { Form } from '../../components/utils/Form/Form';
 
 export const SearchByCharacters = () => {
 	const { data, isLoading } = useFetch();
+	const [input, setInput] = useState('');
 	const [results, setResults] = useState<{ [key: string]: string[] }[]>([]);
 	const [filteredResults, setFilteredResults] = useState<string[]>([]);
-	const [input, setInput] = useState('');
 
 	useEffect(() => {
 		if (!isLoading) {

@@ -1,33 +1,42 @@
 import { Form } from '../utils/Form/Form';
 import { Input } from '../utils/Input/Input';
 import { useFetch } from '../../hooks/useFetch';
-import { FormEvent, FormEventHandler, useEffect, useState } from 'react';
-
-class CountryNode {
-	name: string;
-	borders: CountryNode[];
-
-	constructor(name: string, borders: CountryNode[]) {
-		this.name = name;
-		this.borders = borders;
-	}
-
-	addNeighbour(neighbour: CountryNode) {
-		this.borders.push(neighbour);
-	}
-}
+import { findDistance } from '../../utils/findDistance';
+import { FormEvent, FormEventHandler, useState } from 'react';
 
 export const ClosestNonNeighbouring = () => {
 	const { data, isLoading } = useFetch();
-	const [result, setResult] = useState('');
+	const [result, setResult] = useState<{
+		distance: string;
+		country: string;
+	}>();
 	const [input, setInput] = useState('');
 	const [error, setError] = useState('');
 
 	const handleSubmit: FormEventHandler = (e: FormEvent) => {
 		e.preventDefault();
+		setError('');
 		const country = data.find((x) => x.name.common === input);
-		country.
 		console.log(country);
+		let smallestDistance: string | null = null;
+		let closestCountry: string | null = null;
+		data.filter((x) => x !== country).forEach((x) => {
+			const currDistance = findDistance(country, x);
+			if (
+				!smallestDistance ||
+				Number(currDistance) < Number(smallestDistance)
+			) {
+				smallestDistance = currDistance;
+				closestCountry = x.name.common;
+			}
+		});
+
+		if (!smallestDistance || !closestCountry) {
+			setError('Error');
+			return;
+		}
+
+		setResult({ distance: smallestDistance, country: closestCountry });
 	};
 
 	return (
@@ -51,7 +60,7 @@ export const ClosestNonNeighbouring = () => {
 							<h4>
 								{error
 									? error
-									: `Closest country: ${result} with distance: ${result}`}
+									: `Closest country: ${result.country} with distance: ${result.distance}`}
 							</h4>
 						))}
 				</Form>

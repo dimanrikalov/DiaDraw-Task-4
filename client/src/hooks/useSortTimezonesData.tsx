@@ -42,9 +42,10 @@ export const useSortTimezonesData = () => {
 
 		const negativeValues = extractNegativeValues(sortedData);
 		const positiveValues = extractPositiveValues(sortedData);
-		const neutralValues = extractNeutralValues(sortedData); //fix UTC and UTC+00:00
-
-		setSortedData([...negativeValues, ...neutralValues, ...positiveValues]);
+		const neutralValues = extractNeutralValues(sortedData);
+		if(neutralValues) {
+			setSortedData([...negativeValues, neutralValues, ...positiveValues]);
+		}
 		setIsLoading(false);
 	}, [data]);
 

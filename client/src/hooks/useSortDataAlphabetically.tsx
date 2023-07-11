@@ -1,5 +1,5 @@
+import { useMemo } from 'react';
 import { useFetch } from './useFetch';
-import { useCallback, useEffect, useState } from 'react';
 
 interface SortedEntry {
 	[key: string]: string[];
@@ -7,10 +7,9 @@ interface SortedEntry {
 
 export const useSortDataAlphabetically = () => {
 	const { data, isLoading } = useFetch();
-	const [sortedData, setSortedData] = useState<SortedEntry[]>([]);
 
-	const sortDataAlphabetically = useCallback(() => {
-		const updatedResults: { [key: string]: string[] }[] = [];
+	const sortedData = useMemo(() => {
+		const updatedResults: SortedEntry[] = [];
 
 		data.forEach((x) => {
 			const stringArr = x.name.common.toLowerCase().split('');
@@ -33,12 +32,8 @@ export const useSortDataAlphabetically = () => {
 			});
 		});
 
-		setSortedData(updatedResults);
+		return updatedResults;
 	}, [data]);
-
-	useEffect(() => {
-		sortDataAlphabetically();
-	}, [sortDataAlphabetically]);
 
 	return { sortedData, isLoading };
 };

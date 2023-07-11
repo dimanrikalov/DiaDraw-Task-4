@@ -1,5 +1,5 @@
 import { useFetch } from './useFetch';
-import { useCallback, useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
 	extractNegativeValues,
 	extractNeutralValues,
@@ -13,12 +13,13 @@ interface SortedEntry {
 export const useSortTimezonesData = () => {
 	const { data } = useFetch();
 	const [isLoading, setIsLoading] = useState(true);
-	const [sortedData, setSortedData] = useState<SortedEntry[]>([]);
 
-	const sortTimeZoneData = useCallback(() => {
+	const sortedData = useMemo((): SortedEntry[] | undefined => {
+		const dataToBeSorted: SortedEntry[] = [];
+
 		data.forEach((country: any) => {
 			country.timezones.forEach((timezone: string) => {
-				const foundTimezone = sortedData.find(
+				const foundTimezone = dataToBeSorted.find(
 					(sortedTimezone: any) =>
 						Object.keys(sortedTimezone)[0] === timezone
 				);
@@ -35,23 +36,20 @@ export const useSortTimezonesData = () => {
 					}
 				} else {
 					//if there is already such timezone just add the country name
-					sortedData.push({ [timezone]: [country.name.common] });
+					dataToBeSorted.push({ [timezone]: [country.name.common] });
 				}
 			});
 		});
 
-		const negativeValues = extractNegativeValues(sortedData);
-		const positiveValues = extractPositiveValues(sortedData);
-		const neutralValues = extractNeutralValues(sortedData);
-		if(neutralValues) {
-			setSortedData([...negativeValues, neutralValues, ...positiveValues]);
-		}
-		setIsLoading(false);
-	}, [data]);
+		const negativeValues = extractNegativeValues(dataToBeSorted);
+		const positiveValues = extractPositiveValues(dataToBeSorted);
+		const neutralValues = extractNeutralValues(dataToBeSorted);
 
-	useEffect(() => {
-		sortTimeZoneData();
-	}, [sortTimeZoneData]);
+		setIsLoading(false);
+		if (negativeValues && neutralValues && positiveValues) {
+			return [...negativeValues, neutralValues, ...positiveValues];
+		}
+	}, [data]);
 
 	return { sortedData, isLoading };
 };

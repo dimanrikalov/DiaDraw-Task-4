@@ -4,6 +4,10 @@ import { Input } from '../utils/Input/Input';
 import styles from './FindByTimezones.module.css';
 import { useSortTimezonesData } from '../../hooks/useSortTimezonesData';
 
+interface SortedEntry {
+	[key: string]: string[];
+}
+
 export const FindByTimezones = () => {
 	const [error, setError] = useState('');
 	const [timezoneOne, setTimezoneOne] = useState('');
@@ -19,11 +23,16 @@ export const FindByTimezones = () => {
 			setError('Both fields are required!');
 			return;
 		}
+
+		if (!sortedData) {
+			return;
+		}
+
 		const indexOne = sortedData.findIndex(
-			(x) => Object.keys(x)[0] === timezoneOne
+			(x: SortedEntry) => Object.keys(x)[0] === timezoneOne
 		);
 		const indexTwo = sortedData.findIndex(
-			(x) => Object.keys(x)[0] === timezoneTwo
+			(x: SortedEntry) => Object.keys(x)[0] === timezoneTwo
 		);
 		if (indexOne === -1 || indexTwo === -1) {
 			setError('Enter valid timezones!');

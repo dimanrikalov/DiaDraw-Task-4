@@ -13,7 +13,10 @@ export const extractNeutralValues = (
 	}
 
 	return {
-		[Object.keys(UTC)[0]]: [...Object.values(UTC)[0], ...Object.values(UTC0)[0]],
+		[Object.keys(UTC)[0]]: [
+			...Object.values(UTC)[0],
+			...Object.values(UTC0)[0],
+		],
 	};
 };
 

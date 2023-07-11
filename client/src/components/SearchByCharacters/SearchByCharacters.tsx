@@ -1,51 +1,20 @@
+import { FormEvent, useState } from 'react';
 import { Input } from '../utils/Input/Input';
-import { useFetch } from '../../hooks/useFetch';
 import styles from './SearchByCharacters.module.css';
-import { FormEvent, useEffect, useState } from 'react';
 import { Form } from '../../components/utils/Form/Form';
+import { useSortDataAlphabetically } from '../../hooks/useSortDataAlphabetically';
 
 export const SearchByCharacters = () => {
-	const { data, isLoading } = useFetch();
 	const [input, setInput] = useState('');
-	const [results, setResults] = useState<{ [key: string]: string[] }[]>([]);
+	const { sortedData, isLoading } = useSortDataAlphabetically();
 	const [filteredResults, setFilteredResults] = useState<string[]>([]);
-
-	useEffect(() => {
-		if (!isLoading) {
-			const updatedResults: { [key: string]: string[] }[] = [];
-
-			data.forEach((x) => {
-				const stringArr = x.name.common.toLowerCase().split('');
-
-				stringArr.forEach((letter: string) => {
-					const found = updatedResults.find(
-						(x) => Object.keys(x)[0] === letter
-					);
-
-					if (found) {
-						const key = Object.keys(found)[0];
-						if (!found[key].includes(x.name.common)) {
-							found[key] = [...found[key], x.name.common];
-						}
-					} else {
-						updatedResults.push({
-							[letter]: [x.name.common],
-						});
-					}
-				});
-			});
-
-			setResults(updatedResults);
-		}
-	}, [data, isLoading]);
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
 		if (!input && input.length > 2) {
 			return;
 		}
-		const res = results.find((x) => input[0] === Object.keys(x)[0]);
-		console.log(res);
+		const res = sortedData.find((x) => input[0] === Object.keys(x)[0]);
 		if (res) {
 			if (input.length > 1) {
 				const realRes = Object.values(res)[0].filter((x: string) => {

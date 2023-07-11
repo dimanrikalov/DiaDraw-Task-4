@@ -4,39 +4,57 @@ import { useFetch } from '../../hooks/useFetch';
 import { findDistance } from '../../utils/findDistance';
 import { FormEvent, FormEventHandler, useState } from 'react';
 
+interface Result {
+	distance: string;
+	country: string;
+}
+
 export const ClosestNonNeighbouring = () => {
 	const { data, isLoading } = useFetch();
-	const [result, setResult] = useState<{
-		distance: string;
-		country: string;
-	}>();
 	const [input, setInput] = useState('');
 	const [error, setError] = useState('');
+	const [result, setResult] = useState<Result>();
 
 	const handleSubmit: FormEventHandler = (e: FormEvent) => {
 		e.preventDefault();
 		setError('');
-		const country = data.find((x) => x.name.common === input);
-		console.log(country);
-		let smallestDistance: string | null = null;
-		let closestCountry: string | null = null;
-		data.filter((x) => x !== country).forEach((x) => {
-			const currDistance = findDistance(country, x);
-			if (
-				!smallestDistance ||
-				Number(currDistance) < Number(smallestDistance)
-			) {
-				smallestDistance = currDistance;
-				closestCountry = x.name.common;
+
+		const findClosestNonNeighbouringCountry = () => {
+			const country = data.find((x) => x.name.common === input);
+			if (!country) {
+				setError('Invalid country name!');
+				return;
 			}
-		});
+			let smallestDistance: string | null = null;
+			let closestCountry: string | null = null;
 
-		if (!smallestDistance || !closestCountry) {
-			setError('Error');
-			return;
-		}
+			data.filter((x) => {
+				if (
+					!x.borders?.includes(country.cca3) &&
+					x.name.common !== country.name.common
+				) {
+					return x;
+				}
+			}).forEach((x) => {
+				const currDistance = findDistance(country, x);
+				if (
+					!smallestDistance ||
+					Number(currDistance) < Number(smallestDistance)
+				) {
+					smallestDistance = currDistance;
+					closestCountry = x.name.common;
+				}
+			});
 
-		setResult({ distance: smallestDistance, country: closestCountry });
+			if (!smallestDistance || !closestCountry) {
+				setError('No country found!');
+				return;
+			}
+
+			setResult({ distance: smallestDistance, country: closestCountry });
+		};
+
+		findClosestNonNeighbouringCountry();
 	};
 
 	return (
@@ -60,7 +78,7 @@ export const ClosestNonNeighbouring = () => {
 							<h4>
 								{error
 									? error
-									: `Closest country: ${result.country} with distance: ${result.distance}`}
+									: `Closest country: ${result.country} with distance: ${result.distance} kms.`}
 							</h4>
 						))}
 				</Form>

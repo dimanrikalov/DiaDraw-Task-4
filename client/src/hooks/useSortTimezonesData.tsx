@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { useFetch } from './useFetch';
+import { useCallback, useEffect, useState } from 'react';
 import {
 	extractNegativeValues,
 	extractNeutralValues,
@@ -14,7 +14,8 @@ export const useSortTimezonesData = () => {
 	const { data } = useFetch();
 	const [isLoading, setIsLoading] = useState(true);
 	const [sortedData, setSortedData] = useState<SortedEntry[]>([]);
-	useEffect(() => {
+
+	const sortTimeZoneData = useCallback(() => {
 		data.forEach((country: any) => {
 			country.timezones.forEach((timezone: string) => {
 				const foundTimezone = sortedData.find(
@@ -41,11 +42,15 @@ export const useSortTimezonesData = () => {
 
 		const negativeValues = extractNegativeValues(sortedData);
 		const positiveValues = extractPositiveValues(sortedData);
-		const neutralValues = extractNeutralValues(sortedData);
+		const neutralValues = extractNeutralValues(sortedData); //fix UTC and UTC+00:00
 
 		setSortedData([...negativeValues, ...neutralValues, ...positiveValues]);
 		setIsLoading(false);
 	}, [data]);
+
+	useEffect(() => {
+		sortTimeZoneData();
+	}, [sortTimeZoneData]);
 
 	return { sortedData, isLoading };
 };

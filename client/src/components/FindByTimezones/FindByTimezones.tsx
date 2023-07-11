@@ -14,7 +14,7 @@ export const FindByTimezones = () => {
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
 		setError('');
-		
+
 		if (!timezoneOne || !timezoneTwo) {
 			setError('Both fields are required!');
 			return;

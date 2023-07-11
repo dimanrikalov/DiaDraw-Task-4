@@ -4,12 +4,12 @@ interface SortedEntry {
 
 export const extractNeutralValues = (
 	arr: SortedEntry[]
-): SortedEntry | null => {
+): SortedEntry => {
 	const UTC = arr.find((x) => Object.keys(x)[0] === 'UTC');
-
 	const UTC0 = arr.find((x) => Object.keys(x)[0] === 'UTC+00:00');
-	if (!UTC || !UTC0) {
-		return null;
+
+	if(!UTC || !UTC0) {
+		return {};
 	}
 
 	return {
@@ -20,7 +20,7 @@ export const extractNeutralValues = (
 	};
 };
 
-export const extractPositiveValues = (arr: { [key: string]: string[] }[]) =>
+export const extractPositiveValues = (arr: { [key: string]: string[] }[]) : SortedEntry[] =>
 	arr
 		.filter((x) => Object.keys(x)[0].includes('+'))
 		.filter((x) => Object.keys(x)[0] !== 'UTC+00:00')
@@ -36,7 +36,7 @@ export const extractPositiveValues = (arr: { [key: string]: string[] }[]) =>
 			return 0;
 		});
 
-export const extractNegativeValues = (arr: { [key: string]: string[] }[]) =>
+export const extractNegativeValues = (arr: { [key: string]: string[] }[])  : SortedEntry[] =>
 	arr
 		.filter((x) => Object.keys(x)[0].includes('-'))
 		.sort((a, b) => {

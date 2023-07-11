@@ -18,7 +18,6 @@ export const ClosestNonNeighbouring = () => {
 	const handleSubmit: FormEventHandler = (e: FormEvent) => {
 		e.preventDefault();
 		setError('');
-
 		const findClosestNonNeighbouringCountry = () => {
 			const country = data.find((x) => x.name.common === input);
 			if (!country) {

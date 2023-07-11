@@ -17,6 +17,7 @@ export const FindByTimezones = () => {
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
+		setResult([]);
 		setError('');
 
 		if (!timezoneOne || !timezoneTwo) {

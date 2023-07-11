@@ -8,10 +8,14 @@ export const SearchByCharacters = () => {
 	const [input, setInput] = useState('');
 	const { sortedData, isLoading } = useSortDataAlphabetically();
 	const [filteredResults, setFilteredResults] = useState<string[]>([]);
+	const [error, setError] = useState('');
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
-		if (!input && input.length > 2) {
+		setError('');
+		setFilteredResults([]);
+		if (!input || input.length > 2) {
+			setError('Enter between 1-2 characters');
 			return;
 		}
 		const res = sortedData.find((x) => input[0] === Object.keys(x)[0]);
@@ -23,6 +27,7 @@ export const SearchByCharacters = () => {
 				setFilteredResults(realRes);
 				return;
 			}
+
 			setFilteredResults(res[input[0]]);
 		}
 	};
@@ -40,13 +45,15 @@ export const SearchByCharacters = () => {
 						value={input}
 						setValue={setInput}
 					/>
-					{filteredResults.length > 0 && (
+
+					{error && <h3>{error}</h3>}
+					{filteredResults.length > 0 ? (
 						<div className={styles.resultDiv}>
 							{filteredResults.map((x, i) => (
 								<p key={i}>{x}</p>
 							))}
 						</div>
-					)}
+					): <h3>No country contains these characters!</h3>}
 				</Form>
 			)}
 		</>

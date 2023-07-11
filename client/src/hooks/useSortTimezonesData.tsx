@@ -14,7 +14,7 @@ export const useSortTimezonesData = () => {
 	const { data } = useFetch();
 	const [isLoading, setIsLoading] = useState(true);
 
-	const sortedData = useMemo((): SortedEntry[] | undefined => {
+	const sortedData = useMemo(() => {
 		const dataToBeSorted: SortedEntry[] = [];
 
 		data.forEach((country: any) => {
@@ -46,9 +46,7 @@ export const useSortTimezonesData = () => {
 		const neutralValues = extractNeutralValues(dataToBeSorted);
 
 		setIsLoading(false);
-		if (negativeValues && neutralValues && positiveValues) {
-			return [...negativeValues, neutralValues, ...positiveValues];
-		}
+		return [...negativeValues, neutralValues, ...positiveValues];
 	}, [data]);
 
 	return { sortedData, isLoading };

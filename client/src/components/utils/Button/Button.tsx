@@ -1,7 +1,12 @@
 import styles from './Button.module.css';
 import { useNavigate } from 'react-router-dom';
 
-export const Button = ({ message, url }: { message: string; url?: string }) => {
+interface ButtonProps {
+	message: string;
+	url?: string;
+}
+
+export const Button: React.FC<ButtonProps> = ({ message, url }) => {
 	const navigate = useNavigate();
 	if (url) {
 		return (

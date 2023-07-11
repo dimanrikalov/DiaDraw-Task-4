@@ -3,28 +3,32 @@ import { Input } from '../utils/Input/Input';
 import { useFetch } from '../../hooks/useFetch';
 import styles from './FindByTimezones.module.css';
 import { FormEvent, useEffect, useState } from 'react';
+import {
+	extractNegativeValues,
+	extractNeutralValues,
+	extractPositiveValues,
+} from '../../utils/getNeutralValues';
 
 export const FindByTimezones = () => {
 	const { data, isLoading } = useFetch();
 	const [orderdData, setOrderedData] = useState<
 		{ [key: string]: string[] }[]
 	>([]);
+	const [error, setError] = useState('');
 	const [timezoneOne, setTimezoneOne] = useState('');
 	const [timezoneTwo, setTimezoneTwo] = useState('');
-	const [shouldHide, setShouldHide] = useState(true);
-	const [error, setError] = useState('');
 	const [result, setResult] = useState<string[]>([]);
 
 	useEffect(() => {
 		const sortedData: { [key: string]: string[] }[] = [];
+
 		data.forEach((country: any) => {
 			country.timezones.forEach((timezone: string) => {
-				//if there is no such timezone in the array add it and add the country name
-				//if there is already such timezone just add the country name
 				const foundTimezone = sortedData.find(
 					(sortedTimezone: any) =>
 						Object.keys(sortedTimezone)[0] === timezone
 				);
+				//if there is no such timezone in the array add it and add the country name
 				if (foundTimezone) {
 					const sortedEntryKey = Object.keys(foundTimezone)[0];
 					const sortedEntryValue = Object.values(foundTimezone)[0];
@@ -36,42 +40,15 @@ export const FindByTimezones = () => {
 						];
 					}
 				} else {
+					//if there is already such timezone just add the country name
 					sortedData.push({ [timezone]: [country.name.common] });
 				}
 			});
 		});
 
-		const negativeValues = sortedData
-			.filter((x) => Object.keys(x)[0].includes('-'))
-			.sort((a, b) => {
-				const utcA = Object.keys(a)[0];
-				const utcB = Object.keys(b)[0];
-
-				if (utcA < utcB) {
-					return 1;
-				} else if (utcA > utcB) {
-					return -1;
-				}
-				return 0;
-			});
-		const positiveValues = sortedData
-			.filter((x) => Object.keys(x)[0].includes('+'))
-			.sort((a, b) => {
-				const utcA = Object.keys(a)[0];
-				const utcB = Object.keys(b)[0];
-
-				if (utcA > utcB) {
-					return 1;
-				} else if (utcA < utcB) {
-					return -1;
-				}
-				return 0;
-			});
-		const neutralValues = sortedData.filter(
-			(x) =>
-				!Object.keys(x)[0].includes('+') &&
-				!Object.keys(x)[0].includes('-')
-		);
+		const negativeValues = extractNegativeValues(sortedData);
+		const positiveValues = extractPositiveValues(sortedData);
+		const neutralValues = extractNeutralValues(sortedData);
 
 		setOrderedData([
 			...negativeValues,
@@ -84,12 +61,10 @@ export const FindByTimezones = () => {
 		e.preventDefault();
 
 		setError('');
-		setShouldHide(false);
 		if (!timezoneOne || !timezoneTwo) {
 			setError('Both fields are required!');
 			return;
 		}
-
 		const indexOne = orderdData.findIndex(
 			(x) => Object.keys(x)[0] === timezoneOne
 		);
@@ -134,15 +109,9 @@ export const FindByTimezones = () => {
 							value={timezoneTwo}
 							setValue={setTimezoneTwo}
 						/>
-						{error ? (
-							<p>{error}</p>
-						) : (
-							<div
-								className={styles.resultDiv}
-								style={{
-									display: shouldHide ? 'none' : 'block',
-								}}
-							>
+						{error && <p>{error}</p>}
+						{result.length > 0 && (
+							<div className={styles.resultDiv}>
 								{result.map((x, i) => (
 									<p key={i}>{x}</p>
 								))}

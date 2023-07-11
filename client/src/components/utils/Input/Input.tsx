@@ -1,15 +1,17 @@
 import styles from './Input.module.css';
 
-export const Input = ({
-	labelText,
-	placeholder,
-	value,
-	setValue,
-}: {
+interface InputProps {
 	labelText: string;
 	placeholder: string;
 	value: string;
 	setValue: Function;
+}
+
+export const Input: React.FC<InputProps> = ({
+	labelText,
+	placeholder,
+	value,
+	setValue,
 }) => {
 	const id = labelText.toLowerCase().split(' ').join('-');
 

@@ -10,11 +10,9 @@ export const FindDistance = () => {
 	const [result, setResult] = useState<string>('');
 	const [inputOne, setInputOne] = useState<string>('');
 	const [inputTwo, setInputTwo] = useState<string>('');
-	const [shouldHide, setShouldHide] = useState<boolean>(true);
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
-		setShouldHide(false);
 
 		if (!inputOne || !inputTwo) {
 			setError('Fill both CCAs!');
@@ -54,9 +52,10 @@ export const FindDistance = () => {
 						value={inputTwo}
 						setValue={setInputTwo}
 					/>
-					<h4 style={{ display: shouldHide ? 'none' : 'block' }}>
-						{error ? error : `Result: ${result} kms.`}
-					</h4>
+					{error ||
+						(result && (
+							<h4>{error ? error : `Result: ${result} kms.`}</h4>
+						))}
 				</Form>
 			)}
 		</>

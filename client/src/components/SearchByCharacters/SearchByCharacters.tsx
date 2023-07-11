@@ -9,7 +9,6 @@ export const SearchByCharacters = () => {
 	const [results, setResults] = useState<{ [key: string]: string[] }[]>([]);
 	const [filteredResults, setFilteredResults] = useState<string[]>([]);
 	const [input, setInput] = useState('');
-	const [shouldHide, setShouldHide] = useState(true);
 
 	useEffect(() => {
 		if (!isLoading) {
@@ -45,8 +44,8 @@ export const SearchByCharacters = () => {
 		if (!input && input.length > 2) {
 			return;
 		}
-
 		const res = results.find((x) => input[0] === Object.keys(x)[0]);
+		console.log(res);
 		if (res) {
 			if (input.length > 1) {
 				const realRes = Object.values(res)[0].filter((x: string) => {
@@ -55,7 +54,6 @@ export const SearchByCharacters = () => {
 				setFilteredResults(realRes);
 				return;
 			}
-			setShouldHide(false);
 			setFilteredResults(res[input[0]]);
 		}
 	};
@@ -65,25 +63,22 @@ export const SearchByCharacters = () => {
 			{isLoading ? (
 				<h1>Fetching data...</h1>
 			) : (
-				<>
-					<Form handleSubmit={handleSubmit} buttonMessage={'Submit'}>
-						<h3>Find countries by characters</h3>
-						<Input
-							labelText={'Enter up to 2 characters'}
-							placeholder={'Example "m/mo"'}
-							value={input}
-							setValue={setInput}
-						/>
-						<div
-							className={styles.resultDiv}
-							style={{ display: shouldHide ? 'none' : 'block' }}
-						>
+				<Form handleSubmit={handleSubmit} buttonMessage={'Submit'}>
+					<h3>Find countries by characters</h3>
+					<Input
+						labelText={'Enter up to 2 characters'}
+						placeholder={'Example "m/mo"'}
+						value={input}
+						setValue={setInput}
+					/>
+					{filteredResults.length > 0 && (
+						<div className={styles.resultDiv}>
 							{filteredResults.map((x, i) => (
 								<p key={i}>{x}</p>
 							))}
 						</div>
-					</Form>
-				</>
+					)}
+				</Form>
 			)}
 		</>
 	);

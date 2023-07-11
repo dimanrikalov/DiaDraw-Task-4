@@ -13,7 +13,8 @@ export const FindDistance = () => {
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
-
+		setError('');
+		
 		if (!inputOne || !inputTwo) {
 			setError('Fill both CCAs!');
 			return '';

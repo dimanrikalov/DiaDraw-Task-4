@@ -30,5 +30,6 @@ export const findDistance = (countryOne: any, countryTwo: any) => {
 	//angular distance between two points on a sphere
 	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 	const distance = earthRadius * c;
+	
 	return distance.toFixed(2);
 };

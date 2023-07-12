@@ -50,7 +50,11 @@ export const FindDistance = () => {
 				setValue={setInputTwo}
 			/>
 
-			{error ? <h4>{error}</h4> : <h4>{`Result: ${result} kms.`}</h4>}
+			{error ? (
+				<p>{error}</p>
+			) : (
+				result && <h4>{`Result: ${result} kms.`}</h4>
+			)}
 		</Form>
 	);
 };

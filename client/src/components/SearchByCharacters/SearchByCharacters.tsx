@@ -40,7 +40,7 @@ export const SearchByCharacters = () => {
 				setValue={setInput}
 			/>
 
-			{error && <h3>{error}</h3>}
+			{error && <p>{error}</p>}
 			{result.length > 0 && (
 				<div className={styles.resultDiv}>
 					{result.map((x, i) => (

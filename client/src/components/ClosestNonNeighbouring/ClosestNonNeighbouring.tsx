@@ -43,7 +43,7 @@ export const ClosestNonNeighbouring = () => {
 				setValue={setInput}
 			/>
 
-			{error && <h4>{error}</h4>}
+			{error && <p>{error}</p>}
 			{result && (
 				<h4>
 					{`Closest country: ${result.country} with distance: ${result.distance} kms.`}

@@ -1,13 +1,13 @@
+import { FormEvent, useState } from 'react';
+import { useApi } from '../../hooks/useApi';
 import { Input } from '../utils/Input/Input';
 import styles from './SearchByCharacters.module.css';
-import { ApiContext } from '../../contexts/ApiContext';
-import { FormEvent, useContext, useState } from 'react';
 import { Form } from '../../components/utils/Form/Form';
 
 export const SearchByCharacters = () => {
 	const [input, setInput] = useState('');
 	const [error, setError] = useState('');
-	const { api } = useContext(ApiContext);
+	const { api } = useApi();
 	const [result, setResult] = useState<string[]>([]);
 
 	const handleSubmit = (e: FormEvent) => {
@@ -20,13 +20,11 @@ export const SearchByCharacters = () => {
 			return;
 		}
 
-		if (api) {
-			try {
-				const res = api.findCountriesByCharacters(input);
-				setResult(res);
-			} catch (err: any) {
-				setError(err.message);
-			}
+		try {
+			const res = api.findCountriesByCharacters(input);
+			setResult(res);
+		} catch (err: any) {
+			setError(err.message);
 		}
 	};
 

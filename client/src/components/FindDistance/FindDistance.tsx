@@ -1,10 +1,10 @@
 import { Form } from '../utils/Form/Form';
+import { useState, FormEvent } from 'react';
+import { useApi } from '../../hooks/useApi';
 import { Input } from '../utils/Input/Input';
-import { ApiContext } from '../../contexts/ApiContext';
-import { useState, FormEvent, useContext } from 'react';
 
 export const FindDistance = () => {
-	const { api } = useContext(ApiContext);
+	const { api } = useApi();
 	const [error, setError] = useState<string>('');
 	const [result, setResult] = useState<string>('');
 	const [inputOne, setInputOne] = useState<string>('');
@@ -21,16 +21,14 @@ export const FindDistance = () => {
 			return '';
 		}
 
-		if (api) {
-			const countryOne = api.countries.find((x) => x.cca3 === inputOne);
-			const countryTwo = api.countries.find((x) => x.cca3 === inputTwo);
+		const countryOne = api.countries.find((x) => x.cca3 === inputOne);
+		const countryTwo = api.countries.find((x) => x.cca3 === inputTwo);
 
-			try {
-				const res = api.findDistance(countryOne, countryTwo);
-				setResult(res);
-			} catch (err: any) {
-				setError(err.message);
-			}
+		try {
+			const res = api.findDistance(countryOne, countryTwo);
+			setResult(res);
+		} catch (err: any) {
+			setError(err.message);
 		}
 	};
 

@@ -1,17 +1,17 @@
 import { Form } from '../utils/Form/Form';
 import { Input } from '../utils/Input/Input';
-import { ApiContext } from '../../contexts/ApiContext';
+import { useApi } from '../../hooks/useApi';
 import { ClosestNonNeighbouringCountry } from '../../Api';
-import { useState, FormEvent, useContext, FormEventHandler } from 'react';
+import { useState, FormEvent, FormEventHandler } from 'react';
 
 export const ClosestNonNeighbouring = () => {
 	const [input, setInput] = useState('');
 	const [error, setError] = useState('');
-	const { api } = useContext(ApiContext);
+	const { api } = useApi();
 	const [result, setResult] = useState<
 		ClosestNonNeighbouringCountry | undefined
 	>(undefined);
-	
+
 	const handleSubmit: FormEventHandler = (e: FormEvent) => {
 		e.preventDefault();
 		setResult(undefined);
@@ -21,14 +21,12 @@ export const ClosestNonNeighbouring = () => {
 			setError('Please enter a country name!');
 		}
 
-		if (api) {
-			try {
-				const res = api.findClosestNonNeighbouringCountry(input);
-				setResult(res);
-			} catch (err: any) {
-				if (err.message) {
-					setError(err.message);
-				}
+		try {
+			const res = api.findClosestNonNeighbouringCountry(input);
+			setResult(res);
+		} catch (err: any) {
+			if (err.message) {
+				setError(err.message);
 			}
 		}
 	};

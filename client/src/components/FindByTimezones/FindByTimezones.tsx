@@ -1,14 +1,14 @@
 import { Form } from '../utils/Form/Form';
+import { useApi } from '../../hooks/useApi';
+import { FormEvent, useState } from 'react';
 import { Input } from '../utils/Input/Input';
 import styles from './FindByTimezones.module.css';
-import { ApiContext } from '../../contexts/ApiContext';
-import { FormEvent, useContext, useState } from 'react';
 
 export const FindByTimezones = () => {
 	const [error, setError] = useState('');
 	const [timezoneOne, setTimezoneOne] = useState('');
 	const [timezoneTwo, setTimezoneTwo] = useState('');
-	const { api } = useContext(ApiContext);
+	const { api } = useApi();
 	const [result, setResult] = useState<string[]>([]);
 
 	const handleSubmit = (e: FormEvent) => {
@@ -21,16 +21,11 @@ export const FindByTimezones = () => {
 			return;
 		}
 
-		if (api) {
-			try {
-				const res = api.findCountriesByTimezones(
-					timezoneOne,
-					timezoneTwo
-				);
-				setResult(res);
-			} catch (err: any) {
-				setError(err.message);
-			}
+		try {
+			const res = api.findCountriesByTimezones(timezoneOne, timezoneTwo);
+			setResult(res);
+		} catch (err: any) {
+			setError(err.message);
 		}
 	};
 

@@ -53,7 +53,9 @@ export const SearchByCharacters = () => {
 								<p key={i}>{x}</p>
 							))}
 						</div>
-					): <h3>No country contains these characters!</h3>}
+					) : (
+						<h3>No country contains these characters!</h3>
+					)}
 				</Form>
 			)}
 		</>

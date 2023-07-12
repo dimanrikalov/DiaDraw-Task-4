@@ -11,10 +11,13 @@ interface SortedEntry {
 }
 
 export const useSortTimezonesData = () => {
-	const { data } = useFetch();
-	const [isLoading, setIsLoading] = useState(true);
+	const { data, isLoading } = useFetch();
 
 	const sortedData = useMemo(() => {
+		if(isLoading) {
+			return [];
+		}
+
 		const dataToBeSorted: SortedEntry[] = [];
 
 		data.forEach((country: any) => {
@@ -45,9 +48,8 @@ export const useSortTimezonesData = () => {
 		const positiveValues = extractPositiveValues(dataToBeSorted);
 		const neutralValues = extractNeutralValues(dataToBeSorted);
 
-		setIsLoading(false);
 		return [...negativeValues, neutralValues, ...positiveValues];
-	}, [data]);
+	}, [data, isLoading]);
 
 	return { sortedData, isLoading };
 };

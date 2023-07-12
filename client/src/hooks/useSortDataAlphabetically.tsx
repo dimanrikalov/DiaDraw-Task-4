@@ -9,6 +9,10 @@ export const useSortDataAlphabetically = () => {
 	const { data, isLoading } = useFetch();
 
 	const sortedData = useMemo(() => {
+		if(isLoading) {
+			return [];
+		}
+
 		const updatedResults: SortedEntry[] = [];
 
 		data.forEach((x) => {
@@ -33,7 +37,7 @@ export const useSortDataAlphabetically = () => {
 		});
 
 		return updatedResults;
-	}, [data]);
+	}, [data, isLoading]);
 
 	return { sortedData, isLoading };
 };

@@ -5,10 +5,10 @@ import { Input } from '../utils/Input/Input';
 import styles from './FindByTimezones.module.css';
 
 export const FindByTimezones = () => {
+	const { api } = useApi();
 	const [error, setError] = useState('');
 	const [timezoneOne, setTimezoneOne] = useState('');
 	const [timezoneTwo, setTimezoneTwo] = useState('');
-	const { api } = useApi();
 	const [result, setResult] = useState<string[]>([]);
 
 	const handleSubmit = (e: FormEvent) => {

@@ -5,9 +5,9 @@ import { ClosestNonNeighbouringCountry } from '../../Api';
 import { useState, FormEvent, FormEventHandler } from 'react';
 
 export const ClosestNonNeighbouring = () => {
+	const { api } = useApi();
 	const [input, setInput] = useState('');
 	const [error, setError] = useState('');
-	const { api } = useApi();
 	const [result, setResult] = useState<
 		ClosestNonNeighbouringCountry | undefined
 	>(undefined);

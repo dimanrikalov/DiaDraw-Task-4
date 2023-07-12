@@ -5,9 +5,9 @@ import styles from './SearchByCharacters.module.css';
 import { Form } from '../../components/utils/Form/Form';
 
 export const SearchByCharacters = () => {
+	const { api } = useApi();
 	const [input, setInput] = useState('');
 	const [error, setError] = useState('');
-	const { api } = useApi();
 	const [result, setResult] = useState<string[]>([]);
 
 	const handleSubmit = (e: FormEvent) => {

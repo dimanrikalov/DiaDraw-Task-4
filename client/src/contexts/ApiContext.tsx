@@ -1,5 +1,5 @@
-import { createContext } from 'react';
 import { Api } from '../Api';
+import { createContext } from 'react';
 
 interface ApiContext {
 	api: Api | undefined;

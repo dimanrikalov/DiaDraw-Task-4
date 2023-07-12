@@ -16,8 +16,8 @@ export interface ClosestNonNeighbouringCountry {
 }
 
 export class Api {
-	earthRadius = 6371;
-	countries: Country[];
+	private earthRadius = 6371;
+	readonly countries: Country[];
 
 	constructor(data: Country[]) {
 		this.countries = data;
@@ -148,59 +148,35 @@ export class Api {
 		throw new Error('No countries fit the requirement!');
 	}
 
-	extractNeutralValues(arr: SortedEntry[]): SortedEntry {
-		const UTC = arr.find((x) => Object.keys(x)[0] === 'UTC');
-		const UTC0 = arr.find((x) => Object.keys(x)[0] === 'UTC+00:00');
+	findCountriesByTimezones(
+		inputTimezoneOne: string,
+		inputTimezoneTwo: string
+	): string[] {
+		const countriesSortedByTimezones = this.sortCountriesByTimezones();
 
-		if (!UTC || !UTC0) {
-			return {};
+		const indexOne = countriesSortedByTimezones.findIndex(
+			(x: SortedEntry) => Object.keys(x)[0] === inputTimezoneOne
+		);
+		const indexTwo = countriesSortedByTimezones.findIndex(
+			(x: SortedEntry) => Object.keys(x)[0] === inputTimezoneTwo
+		);
+		if (indexOne === -1 || indexTwo === -1) {
+			throw new Error('Enter valid timezones!');
 		}
 
-		return {
-			[Object.keys(UTC)[0]]: [
-				...Object.values(UTC)[0],
-				...Object.values(UTC0)[0],
-			],
-		};
-	}
-
-	extractPositiveValues(arr: SortedEntry[]): SortedEntry[] {
-		return arr
-			.filter(
-				(x) =>
-					Object.keys(x)[0].includes('+') &&
-					Object.keys(x)[0] !== 'UTC+00:00'
+		return Array.from(
+			new Set(
+				countriesSortedByTimezones
+					.slice(
+						Math.min(indexOne, indexTwo),
+						Math.max(indexOne, indexTwo) + 1
+					)
+					.flatMap((x) => Object.values(x)[0])
 			)
-			.sort((a, b) => {
-				const utcA = Object.keys(a)[0];
-				const utcB = Object.keys(b)[0];
-
-				if (utcA > utcB) {
-					return 1;
-				} else if (utcA < utcB) {
-					return -1;
-				}
-				return 0;
-			});
+		);
 	}
 
-	extractNegativeValues(arr: SortedEntry[]): SortedEntry[] {
-		return arr
-			.filter((x) => Object.keys(x)[0].includes('-'))
-			.sort((a, b) => {
-				const utcA = Object.keys(a)[0];
-				const utcB = Object.keys(b)[0];
-
-				if (utcA < utcB) {
-					return 1;
-				} else if (utcA > utcB) {
-					return -1;
-				}
-				return 0;
-			});
-	}
-
-	sortCountriesByTimezones(): SortedEntry[] {
+	private sortCountriesByTimezones(): SortedEntry[] {
 		const dataToBeSorted: SortedEntry[] = [];
 
 		this.countries.forEach((country: any) => {
@@ -234,31 +210,55 @@ export class Api {
 		return [...negativeValues, neutralValues, ...positiveValues];
 	}
 
-	findCountriesByTimezones(
-		inputTimezoneOne: string,
-		inputTimezoneTwo: string
-	): string[] {
-		const countriesSortedByTimezones = this.sortCountriesByTimezones();
+	private extractNeutralValues(arr: SortedEntry[]): SortedEntry {
+		const UTC = arr.find((x) => Object.keys(x)[0] === 'UTC');
+		const UTC0 = arr.find((x) => Object.keys(x)[0] === 'UTC+00:00');
 
-		const indexOne = countriesSortedByTimezones.findIndex(
-			(x: SortedEntry) => Object.keys(x)[0] === inputTimezoneOne
-		);
-		const indexTwo = countriesSortedByTimezones.findIndex(
-			(x: SortedEntry) => Object.keys(x)[0] === inputTimezoneTwo
-		);
-		if (indexOne === -1 || indexTwo === -1) {
-			throw new Error('Enter valid timezones!');
+		if (!UTC || !UTC0) {
+			return {};
 		}
 
-		return Array.from(
-			new Set(
-				countriesSortedByTimezones
-					.slice(
-						Math.min(indexOne, indexTwo),
-						Math.max(indexOne, indexTwo) + 1
-					)
-					.flatMap((x) => Object.values(x)[0])
+		return {
+			[Object.keys(UTC)[0]]: [
+				...Object.values(UTC)[0],
+				...Object.values(UTC0)[0],
+			],
+		};
+	}
+
+	private extractPositiveValues(arr: SortedEntry[]): SortedEntry[] {
+		return arr
+			.filter(
+				(x) =>
+					Object.keys(x)[0].includes('+') &&
+					Object.keys(x)[0] !== 'UTC+00:00'
 			)
-		);
+			.sort((a, b) => {
+				const utcA = Object.keys(a)[0];
+				const utcB = Object.keys(b)[0];
+
+				if (utcA > utcB) {
+					return 1;
+				} else if (utcA < utcB) {
+					return -1;
+				}
+				return 0;
+			});
+	}
+
+	private extractNegativeValues(arr: SortedEntry[]): SortedEntry[] {
+		return arr
+			.filter((x) => Object.keys(x)[0].includes('-'))
+			.sort((a, b) => {
+				const utcA = Object.keys(a)[0];
+				const utcB = Object.keys(b)[0];
+
+				if (utcA < utcB) {
+					return 1;
+				} else if (utcA > utcB) {
+					return -1;
+				}
+				return 0;
+			});
 	}
 }

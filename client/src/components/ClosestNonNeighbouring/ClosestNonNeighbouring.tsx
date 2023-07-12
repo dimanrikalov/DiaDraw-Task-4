@@ -11,7 +11,7 @@ export const ClosestNonNeighbouring = () => {
 	const [result, setResult] = useState<
 		ClosestNonNeighbouringCountry | undefined
 	>(undefined);
-
+	
 	const handleSubmit: FormEventHandler = (e: FormEvent) => {
 		e.preventDefault();
 		setResult(undefined);

@@ -9,7 +9,7 @@ import { CountriesContext } from './contexts/CountriesContext';
 
 function App() {
 	const { countriesData } = useContext(CountriesContext);
-
+	
 	const api = useMemo(() => {
 		if (!countriesData) {
 			return undefined;

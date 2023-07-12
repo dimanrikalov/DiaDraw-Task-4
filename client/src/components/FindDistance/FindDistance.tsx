@@ -1,11 +1,10 @@
+import { ApiContext } from '../../App';
 import { Form } from '../utils/Form/Form';
-import { useState, FormEvent } from 'react';
 import { Input } from '../utils/Input/Input';
-import { useFetch } from '../../hooks/useFetch';
-import { findDistance } from '../../utils/findDistance';
+import { useState, FormEvent, useContext } from 'react';
 
 export const FindDistance = () => {
-	const { data, isLoading } = useFetch();
+	const { api } = useContext(ApiContext);
 	const [error, setError] = useState<string>('');
 	const [result, setResult] = useState<string>('');
 	const [inputOne, setInputOne] = useState<string>('');
@@ -13,53 +12,45 @@ export const FindDistance = () => {
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
+
 		setError('');
+		setResult('');
 
 		if (!inputOne || !inputTwo) {
 			setError('Fill both CCAs!');
 			return '';
 		}
 
-		const countryOne = data.find((x) => x.cca3 === inputOne);
-		const countryTwo = data.find((x) => x.cca3 === inputTwo);
+		if (api) {
+			const countryOne = api.countries.find((x) => x.cca3 === inputOne);
+			const countryTwo = api.countries.find((x) => x.cca3 === inputTwo);
 
-		const res = findDistance(countryOne, countryTwo);
-		if (!Number(res)) {
-			setError(result);
-			setResult('');
-			return;
+			try {
+				const res = api.findDistance(countryOne, countryTwo);
+				setResult(res);
+			} catch (err: any) {
+				setError(err.message);
+			}
 		}
-		setResult(res);
 	};
 
 	return (
-		<>
-			{isLoading ? (
-				<h1>Fetching data...</h1>
-			) : (
-				<Form
-					buttonMessage={'Find distance'}
-					handleSubmit={handleSubmit}
-				>
-					<h3>Find distance between 2 countries</h3>
-					<Input
-						labelText={'Country 1 CCA3'}
-						placeholder={'Example: MCO'}
-						value={inputOne}
-						setValue={setInputOne}
-					/>
-					<Input
-						labelText={'Country 2 CCA3'}
-						placeholder={'Example: ITA'}
-						value={inputTwo}
-						setValue={setInputTwo}
-					/>
-					{error ||
-						(result && (
-							<h4>{error ? error : `Result: ${result} kms.`}</h4>
-						))}
-				</Form>
-			)}
-		</>
+		<Form buttonMessage={'Find distance'} handleSubmit={handleSubmit}>
+			<h3>Find distance between 2 countries</h3>
+			<Input
+				labelText={'Country 1 CCA3'}
+				placeholder={'Example: MCO'}
+				value={inputOne}
+				setValue={setInputOne}
+			/>
+			<Input
+				labelText={'Country 2 CCA3'}
+				placeholder={'Example: ITA'}
+				value={inputTwo}
+				setValue={setInputTwo}
+			/>
+
+			{error ? <h4>{error}</h4> : <h4>{`Result: ${result} kms.`}</h4>}
+		</Form>
 	);
 };

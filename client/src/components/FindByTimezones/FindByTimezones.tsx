@@ -1,7 +1,7 @@
-import { ApiContext } from '../../App';
 import { Form } from '../utils/Form/Form';
 import { Input } from '../utils/Input/Input';
 import styles from './FindByTimezones.module.css';
+import { ApiContext } from '../../contexts/ApiContext';
 import { FormEvent, useContext, useState } from 'react';
 
 export const FindByTimezones = () => {

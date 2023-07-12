@@ -1,16 +1,11 @@
 import './App.css';
 import { Api } from './Api';
 import { Router } from './Router';
+import { useContext, useMemo } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Navbar } from './components/utils/Navbar/Navbar';
-import { useContext, useMemo, createContext } from 'react';
+import { ApiContextProvider } from './contexts/ApiContext';
 import { CountriesContext } from './contexts/CountriesContext';
-
-interface ApiContext {
-	api: Api | undefined;
-}
-
-export const ApiContext = createContext<ApiContext>({ api: undefined });
 
 function App() {
 	const { countriesData } = useContext(CountriesContext);
@@ -32,9 +27,9 @@ function App() {
 					{!api ? (
 						<h1>Fetching data...</h1>
 					) : (
-						<ApiContext.Provider value={{ api: api }}>
+						<ApiContextProvider api={api}>
 							<Router />
-						</ApiContext.Provider>
+						</ApiContextProvider>
 					)}
 				</main>
 			</BrowserRouter>

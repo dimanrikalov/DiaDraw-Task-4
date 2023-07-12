@@ -1,6 +1,6 @@
-import { ApiContext } from '../../App';
 import { Input } from '../utils/Input/Input';
 import styles from './SearchByCharacters.module.css';
+import { ApiContext } from '../../contexts/ApiContext';
 import { FormEvent, useContext, useState } from 'react';
 import { Form } from '../../components/utils/Form/Form';
 

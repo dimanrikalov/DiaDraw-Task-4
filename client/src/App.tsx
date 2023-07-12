@@ -15,7 +15,7 @@ function App() {
 			return undefined;
 		}
 		return new Api(countriesData);
-	}, [countriesData, Api]); //should i pass Api too?
+	}, [countriesData]);
 
 	return (
 		<div className="App">
